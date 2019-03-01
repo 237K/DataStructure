@@ -160,10 +160,10 @@ int main(void)
 	InorderTraverse(bt1, ShowIntData);
 	cout << endl << endl;
 
-	cout << "delete 2 Node" << endl << endl;
-	DeleteTree(bt2);
-	InorderTraverse(bt1, ShowIntData);
-	cout << endl << endl;
+	//cout << "delete 2 Node" << endl << endl;
+	//DeleteTree(bt2);
+	//InorderTraverse(bt1, ShowIntData);
+	//cout << endl << endl;
 
 	return 0;
 }
