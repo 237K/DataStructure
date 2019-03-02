@@ -26,8 +26,7 @@
 #include <vector>
 using namespace std;
 const static int MAX = 100;
-typedef pair<int, int> HeapElement;		//first = Priority / second = data
-
+typedef pair<int, int> HeapElement;				//first = Priority / second = data
 class Heap
 {
 private:
