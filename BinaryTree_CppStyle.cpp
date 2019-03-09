@@ -37,13 +37,13 @@ template <typename T>
 class Node
 {
 	friend class BinaryTree<T>;
-private:
+public:
 	T data;
 	int check;
-	Node<T> *left;
-	Node<T> *right;
+	BinaryTree<T> *left;
+	BinaryTree<T> *right;
 public:
-	Node(T data, Node<T>* left = NULL, Node<T>* right = NULL)
+	Node(T data, BinaryTree<T>* left = NULL, BinaryTree<T>* right = NULL)
 	{
 		this->data = data;
 		check = 1;
@@ -52,7 +52,6 @@ public:
 	}
 	~Node()
 	{
-		check = 0;
 		delete left;
 		delete right;
 	}
@@ -62,7 +61,7 @@ template <typename T>
 class BinaryTree
 {
 	friend class Node<T>;
-private:
+public:
 	Node<T> *BTnode;
 public:
 	BinaryTree(T data = 0)
@@ -79,7 +78,7 @@ public:
 	}
 	T GetData()
 	{
-		if (BTnode != NULL || BTnode->check == 1)
+		if (BTnode != NULL)
 			return BTnode->data;
 		else
 		{
@@ -101,9 +100,9 @@ public:
 	}
 	void MakeLeftSubTree(BinaryTree<T>* bt)
 	{
-		if (BTnode != NULL || BTnode->check == 1)
+		if (BTnode != NULL)
 		{
-			if (BTnode->left != NULL && BTnode->check == 1)
+			if (BTnode->left != NULL)
 			{
 				delete BTnode->left;
 				BTnode->left = NULL;
@@ -118,9 +117,9 @@ public:
 	}
 	void MakeRightSubTree(BinaryTree<T>* bt)
 	{
-		if (BTnode != NULL || BTnode->check == 1)
+		if (BTnode != NULL)
 		{
-			if (BTnode->right != NULL && BTnode->check == 1)
+			if (BTnode->right != NULL)
 			{
 				delete BTnode->right;
 				BTnode->right = NULL;
@@ -133,43 +132,42 @@ public:
 			exit(-1);
 		}
 	}
-	friend void InorderTraverse(BinaryTree<T> *bt, VisitFuncPtr action);
-	friend void DeleteTree(BinaryTree<T> *bt);
+
+	void InorderTraverse(BinaryTree<T> *bt, VisitFuncPtr action)
+	{
+		BinaryTree<T> *temp = new BinaryTree<T>();
+		temp = bt;
+
+		if (temp == NULL)
+		{
+			return;
+		}
+		else
+		{
+			InorderTraverse(temp->BTnode->left, action);
+			action(temp->BTnode->data);
+			InorderTraverse(temp->BTnode->right, action);
+		}
+	}
+	void DeleteTree(BinaryTree<T> *bt)
+	{
+		if (bt == NULL)
+		{
+			return;
+		}
+		else
+		{
+			DeleteTree(bt->BTnode->left);
+			DeleteTree(bt->BTnode->right);
+			cout << "Delete " << bt->BTnode->data << endl;
+			delete bt;
+			bt = NULL;
+		}
+	}
+
+	//friend void InorderTraverse(BinaryTree<T> *bt, VisitFuncPtr action);
+	//friend void DeleteTree(BinaryTree<T> *bt);
 };
-
-template <typename T>
-void InorderTraverse(BinaryTree<T> *bt, VisitFuncPtr action)
-{
-	if (bt->BTnode==NULL || bt->BTnode->check == 0)
-	{
-		cout << "Node is Empty" << endl << endl;
-		return;
-	}
-	else
-	{
-		InorderTraverse(bt->BTnode->left, action);
-		action(bt->BTnode->data);
-		InorderTraverse(bt->BTnode->right, action);
-	}
-}
-
-template <typename T>
-void DeleteTree(BinaryTree<T> *bt)
-{
-	if (bt->BTnode == NULL || bt->BTnode->check == 0)
-	{
-		cout << "Already deleted" << endl << endl;
-		return;
-	}
-	else
-	{
-		DeleteTree(bt->BTnode->left);
-		DeleteTree(bt->BTnode->right);
-		cout << "Delete " << bt->BTnode->data << endl;
-		delete bt;
-		bt = NULL;
-	}
-}
 
 void ShowIntData(int data)
 {
@@ -196,13 +194,13 @@ int main(void)
 	BT2->MakeRightSubTree(BT5);
 
 	cout << "Current Binary tree : ";
-	InorderTraverse(BT1, ShowIntData);
+	BT1->InorderTraverse(BT1, ShowIntData);
 	cout << endl << endl;
-	cout << "Delete 2 tree" << endl<<endl;
-	DeleteTree(BT2);
-	cout << "Current Binary tree : ";
-	InorderTraverse(BT1, ShowIntData);
-	cout << endl << endl;
+	//cout << "Delete 2 tree" << endl<<endl;
+	//BT2->DeleteTree(BT2);
+	//cout << "Current Binary tree : ";
+	//BT1->InorderTraverse(BT1, ShowIntData);
+	//cout << endl << endl;
 
 
 	return 0;
